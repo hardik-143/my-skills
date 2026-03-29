@@ -102,12 +102,10 @@ function setNestedValue(
   value: unknown,
 ): void {
   const keys = path.split('.');
-  for (const k of keys) {
-    if (isUnsafeKey(k)) return;
-  }
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < keys.length - 1; i++) {
     const key = keys[i];
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') return;
     if (
       !(key in current) ||
       typeof current[key] !== 'object' ||
@@ -118,6 +116,7 @@ function setNestedValue(
     current = current[key] as Record<string, unknown>;
   }
   const lastKey = keys[keys.length - 1];
+  if (lastKey === '__proto__' || lastKey === 'constructor' || lastKey === 'prototype') return;
   current[lastKey] = value;
 }
 
