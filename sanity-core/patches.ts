@@ -92,7 +92,9 @@ export function applyPatches<T extends Record<string, unknown>>(
   return result;
 }
 
-const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+function isUnsafeKey(key: string): boolean {
+  return key === '__proto__' || key === 'constructor' || key === 'prototype';
+}
 
 function setNestedValue(
   obj: Record<string, unknown>,
@@ -100,19 +102,23 @@ function setNestedValue(
   value: unknown,
 ): void {
   const keys = path.split('.');
-  if (keys.some((k) => UNSAFE_KEYS.has(k))) return;
+  for (const k of keys) {
+    if (isUnsafeKey(k)) return;
+  }
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
     if (
-      !(keys[i] in current) ||
-      typeof current[keys[i]] !== 'object' ||
-      current[keys[i]] === null
+      !(key in current) ||
+      typeof current[key] !== 'object' ||
+      current[key] === null
     ) {
-      current[keys[i]] = {};
+      current[key] = {};
     }
-    current = current[keys[i]] as Record<string, unknown>;
+    current = current[key] as Record<string, unknown>;
   }
-  current[keys[keys.length - 1]] = value;
+  const lastKey = keys[keys.length - 1];
+  current[lastKey] = value;
 }
 
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
@@ -132,7 +138,9 @@ function deleteNestedValue(
   path: string,
 ): void {
   const keys = path.split('.');
-  if (keys.some((k) => UNSAFE_KEYS.has(k))) return;
+  for (const k of keys) {
+    if (isUnsafeKey(k)) return;
+  }
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < keys.length - 1; i++) {
     if (!(keys[i] in current) || typeof current[keys[i]] !== 'object') {
