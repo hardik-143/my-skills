@@ -55,8 +55,8 @@ function createFallbackClient(config: SanityClientConfig): SanityClientLike {
   };
 
   return {
-    fetch: async <T = unknown>(query: string) => {
-      warn('fetch');
+    fetch: async <T = unknown>(query: string, params?: Record<string, unknown>) => {
+      warn(`fetch with query: ${query}`);
       return undefined as unknown as T;
     },
     create: noop,

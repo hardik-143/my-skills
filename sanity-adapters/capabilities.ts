@@ -7,17 +7,17 @@ import { SanityCapabilities } from '../sanity-core/types';
  */
 export function detectCapabilities(): SanityCapabilities {
   return {
-    hasDefineField: moduleExportsFunction('sanity', 'defineField'),
-    hasDefineType: moduleExportsFunction('sanity', 'defineType'),
+    hasDefineField: moduleExportsValue('sanity', 'defineField'),
+    hasDefineType: moduleExportsValue('sanity', 'defineType'),
     hasSanityUI: moduleExists('@sanity/ui'),
-    hasHooksAPI: moduleExportsFunction('sanity', 'useClient') || moduleExportsFunction('sanity', 'useDocumentOperation'),
-    hasPluginSystem: moduleExportsFunction('sanity', 'definePlugin'),
+    hasHooksAPI: moduleExportsValue('sanity', 'useClient') || moduleExportsValue('sanity', 'useDocumentOperation'),
+    hasPluginSystem: moduleExportsValue('sanity', 'definePlugin'),
     hasPreviewPane: moduleExists('@sanity/preview-url-secret') || moduleExists('sanity/desk'),
-    hasPatchEvent: moduleExportsFunction('sanity', 'PatchEvent') || moduleExportsFunction('@sanity/form-builder', 'PatchEvent'),
-    hasDocumentActions: moduleExportsFunction('sanity', 'useDocumentOperation'),
+    hasPatchEvent: moduleExportsValue('sanity', 'PatchEvent') || moduleExportsValue('@sanity/form-builder', 'PatchEvent'),
+    hasDocumentActions: moduleExportsValue('sanity', 'useDocumentOperation'),
     hasDeskTool: moduleExists('sanity/desk') || moduleExists('@sanity/desk-tool'),
     hasStructureTool: moduleExists('sanity/structure') || moduleExists('sanity/desk'),
-    hasFormBuilder: moduleExists('@sanity/form-builder') || moduleExportsFunction('sanity', 'useFormValue'),
+    hasFormBuilder: moduleExists('@sanity/form-builder') || moduleExportsValue('sanity', 'useFormValue'),
   };
 }
 
@@ -31,11 +31,11 @@ function moduleExists(name: string): boolean {
   }
 }
 
-/** Check if a module exports a specific named function/value */
-function moduleExportsFunction(moduleName: string, exportName: string): boolean {
+/** Check if a module exports a specific named value */
+function moduleExportsValue(moduleName: string, exportName: string): boolean {
   try {
     const mod = require(moduleName);
-    return typeof mod[exportName] === 'function' || mod[exportName] !== undefined;
+    return mod[exportName] !== undefined;
   } catch {
     return false;
   }
