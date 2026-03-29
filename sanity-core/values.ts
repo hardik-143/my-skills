@@ -1,3 +1,5 @@
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
 /** Safely get a deeply nested value by dot-path */
 export function getValue<T = unknown>(
   obj: Record<string, unknown> | undefined,
@@ -23,6 +25,7 @@ export function setValue<T extends Record<string, unknown>>(
 ): T {
   if (!path) return value as T;
   const keys = path.split('.');
+  if (keys.some((k) => UNSAFE_KEYS.has(k))) return obj;
   const result = { ...obj };
   let current: Record<string, unknown> = result;
   for (let i = 0; i < keys.length - 1; i++) {
@@ -46,6 +49,7 @@ export function deleteValue<T extends Record<string, unknown>>(
 ): T {
   if (!path) return obj;
   const keys = path.split('.');
+  if (keys.some((k) => UNSAFE_KEYS.has(k))) return obj;
   if (keys.length === 1) {
     const { [keys[0]]: _, ...rest } = obj;
     return rest as T;

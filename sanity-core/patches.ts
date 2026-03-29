@@ -92,12 +92,15 @@ export function applyPatches<T extends Record<string, unknown>>(
   return result;
 }
 
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
 function setNestedValue(
   obj: Record<string, unknown>,
   path: string,
   value: unknown,
 ): void {
   const keys = path.split('.');
+  if (keys.some((k) => UNSAFE_KEYS.has(k))) return;
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < keys.length - 1; i++) {
     if (
@@ -129,6 +132,7 @@ function deleteNestedValue(
   path: string,
 ): void {
   const keys = path.split('.');
+  if (keys.some((k) => UNSAFE_KEYS.has(k))) return;
   let current: Record<string, unknown> = obj;
   for (let i = 0; i < keys.length - 1; i++) {
     if (!(keys[i] in current) || typeof current[keys[i]] !== 'object') {
