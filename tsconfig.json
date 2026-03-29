@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "commonjs",
+    "lib": ["ES2018", "DOM"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/sanity-core/*": ["sanity-core/*"],
+      "@/sanity-adapters/*": ["sanity-adapters/*"],
+      "@/sanity-ui-kit/*": ["sanity-ui-kit/*"],
+      "@/sanity-components/*": ["sanity-components/*"],
+      "@/sanity-skills/*": ["sanity-skills/*"]
+    }
+  },
+  "include": [
+    "sanity-core/**/*.ts",
+    "sanity-core/**/*.tsx",
+    "sanity-adapters/**/*.ts",
+    "sanity-adapters/**/*.tsx",
+    "sanity-ui-kit/**/*.ts",
+    "sanity-ui-kit/**/*.tsx",
+    "sanity-components/**/*.ts",
+    "sanity-components/**/*.tsx",
+    "sanity-skills/**/*.ts",
+    "sanity-skills/**/*.tsx",
+    "index.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
+}
